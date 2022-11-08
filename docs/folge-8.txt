@@ -1,0 +1,40 @@
+#
+# FOLGE 8: 1-N Beziehungen
+###############################################
+
+    php artisan make:migration add_user_id_to_posts_table --table=posts
+
+    $table->integer('user_id')
+        ->unsigned()
+        ->nullable()
+        ->after('title');
+    $table->dropColumn('author');
+     
+    $table->string('author')->after('title');
+    $table->dropColumn('user_id');
+
+###############################################
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+###############################################
+
+    use App\Models\User;
+    use App\Models\Post;
+
+    User::factory()
+        ->count(10)
+        ->has(Post::factory()->count(3))
+        ->create();
+
+###############################################
+
+    => Tinker-Demo

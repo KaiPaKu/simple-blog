@@ -1,0 +1,114 @@
+php artisan make:model Category -mf
+
+1. Category Model und Migration erstellen
+
+
+public function up()
+    {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+    } 
+
+
+1. Pivot Table erstelllen
+
+    php artisan make:migration create_category_post_table
+
+    public function up()
+    {
+        Schema::create('category_post', function (Blueprint $table) {
+            $table->id();
+            $table->integer('category_id')->unsigned();
+            $table->integer('post_id')->unsigned(); 
+            $table->timestamps();
+        });
+    }
+
+
+2. Factory erstellen
+
+	class CategoryFactory extends Factory
+	{	
+    	    /**
+     	     * Define the model's default state.
+     	     *
+     	     * @return array
+     	     */
+    	    public function definition()
+    	    {
+                return [
+                    'name' => $this->faker->word(), 
+                ];
+    	    }
+	}
+
+
+4. Database Seeder ändern
+
+    	//User::factory(10)->create();
+        //Post::factory(20)->create();
+
+     	User::factory()
+            ->count(10)
+            //->has(Post::factory()->count())
+            ->create();
+
+        class PostFactory extends Factory
+        {
+            /**
+            * Define the model's default state.
+            *
+            * @return array
+            */
+            public function definition()
+            {
+                return [
+                    'title'   => $this->faker->sentence(3),
+                    'user_id' => User::inRandomOrder()->first()->id,
+                    'lead'    => $this->faker->sentence(10),
+                    'content' => $this->faker->text(600),
+                    'image'   => $this->faker->imageUrl($width=900, $height=400),
+                ];
+            }
+        }
+
+        $categories = array ('Web Design','HTML','Freebies','JavaScript','CSS','Tutorials');
+        foreach($categories as $category) {
+            Category::factory()->create([
+                'name' => $category,
+            ]);
+        }
+               
+
+6. Models Methoden für Beziehung ergänzen
+
+    	public function posts()
+    	{
+        	return $this->belongsToMany(Post::class);
+    	}	
+
+    	public function categories()
+    	{
+        	return $this->belongsToMany(Category::class);
+    	}
+
+7. Pivot-Table füllen
+
+
+        Post::all()->each(function ($post) {
+            $post->categories()->attach(
+                Category::all()->random(rand(1,3))->pluck('id')->toArray()
+            );
+        });
+
+
+8. Post-View aktualisieren
+
+	@foreach($post->categories as $category)
+            <a class="badge bg-secondary text-decoration-none link-light" href="#!">
+		{{ $category->name }}
+	    </a>
+	@endforeach

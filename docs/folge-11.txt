@@ -1,0 +1,86 @@
+REGISTER / LOGIN / LOGOUT
+
+card.blade.php
+++++++++++++++++++++++++
+Links korrigieren:
+{{ url('posts/' . $post->id ) }}
+
+post.blade.php
++++++++++++++++++++++++++
+Link korrigieren:
+<img class="img-fluid rounded" src="{{ url($post->image) }}" alt="..." />
+
+PostController.php
++++++++++++++++++++++++++
+auth-Middleware aktivieren mit Ausnahmen
+public function __construct()
+{
+    $this->middleware('auth')->except(['index', 'show']);
+}
+
+app.blade.php
+++++++++++++++++++++++++
+Login/Logout Buttons im Header-Menu:
+@if(Auth::check()) 
+<form method="POST" action="{{ url('logout') }}" }}>
+  @csrf
+  <button type="submit" class="btn btn-primary">Logout</button>
+</form>
+@else
+  <a class="btn btn-primary" href="{{ url('login') }}" role="button">Login</a>
+@endif
+
+RouteServiceProvider.php
+++++++++++++++++++++++++++
+Redirect korrigeren:
+public const HOME = '/';
+
+==========================================================================
+
+FILE UPLOAD
+
+home.blade.php
+++++++++++++++++++++++++
+in sidebar:
+@if(Auth::check()) 
+   <div class="card mb-4">
+     <div class="card-header">Neuer Post</div>
+        <div class="card-body">
+        <a class="btn btn-success" href="{{ url('posts/create') }}" role="button">Neuen Post erstellen</a>
+     </div>
+   </div>
+@endif
+
+createPost.blade.php
++++++++++++++++++++++++++
+<form method="POST" action="{{ url('/posts') }}" enctype="multipart/form-data">
+
+<div class="mb-3">
+  <label for="image" class="form-label">Default file input example</label>
+  <input name="image" class="form-control" type="file" id="image">
+</div>
+
+PostController.php
++++++++++++++++++++++++++
+
+public function store(Request $request)
+{
+    $post = new Post();
+    $post->title   = $request->input('title');
+    $post->lead    = $request->input('lead');
+    $post->content = $request->input('content');
+    $post->user_id = auth()->id();
+    //$post->image   = "https://via.placeholder.com/900x400.png/001166?text=eum";   
+        
+    $path = $request->file('image')->store('images', 'public');
+    $post->image = 'storage/'. $path;
+    $post->save();
+
+    return redirect('/posts');
+}
+
+public function index()
+{
+    $posts = Post::orderBy('created_at', 'desc')->paginate(5);
+    //...
+}

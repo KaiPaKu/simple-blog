@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class HomeController extends Controller
 {
@@ -24,5 +27,18 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    
+    
+    $role = Role::create (['name' => 'admin'  ]);
+    //Role::create (['name' => 'writer' ]);
+
+    //Permission::create (['name' => 'write articles'   ]);
+    //Permission::create (['name' => 'delete articles'  ]);
+    //Permission::create (['name' => 'edit articles'    ]);
+
+
+    //$admin -> syncPermissions   ($write, $delete, $edit);
+    //$write -> syncRoles         ($writer); 
+
     }
 }

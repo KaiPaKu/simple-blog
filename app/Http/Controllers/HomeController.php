@@ -29,16 +29,5 @@ class HomeController extends Controller
         return view('home');
     
     
-    $role = Role::create (['name' => 'admin'  ]);
-    //Role::create (['name' => 'writer' ]);
-
-    //Permission::create (['name' => 'write articles'   ]);
-    //Permission::create (['name' => 'delete articles'  ]);
-    //Permission::create (['name' => 'edit articles'    ]);
-
-
-    //$admin -> syncPermissions   ($write, $delete, $edit);
-    //$write -> syncRoles         ($writer); 
-
     }
 }

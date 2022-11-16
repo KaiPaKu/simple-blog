@@ -45,14 +45,14 @@
 
 @section('sidebar')
 
-    @if(Auth::check()) 
-   <div class="card mb-4">
-     <div class="card-header">Neuer Post</div>
-        <div class="card-body">
-            <a class="btn btn-success" href="{{ url('posts/create') }}" role="button">Neuen Post erstellen</a>
+    @can('edit articles') 
+        <div class="card mb-4">
+            <div class="card-header">Neuer Post</div>
+            <div class="card-body">
+                <a class="btn btn-success" href="{{ url('posts/create') }}" role="button">Neuen Post erstellen</a>
+            </div>
         </div>
-    </div>
-    @endif
+    @endcan
     
     <!-- Search widget-->
     <div class="card mb-4">

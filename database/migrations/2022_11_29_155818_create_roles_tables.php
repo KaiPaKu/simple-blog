@@ -68,15 +68,16 @@ class CreateRolesTables extends Migration
 
             $table->primary(['role_id', 'user_id']);
         });
+        
+    }
 
-        /**
-         * Reverse the migrations.
-         *
-         * @return void
-         */
-        public function down()
-        {
-            Schema::dropIfExists('roles_tables');
-        }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('roles_tables');
     }
 }

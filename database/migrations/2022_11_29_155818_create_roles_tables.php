@@ -68,8 +68,9 @@ class CreateRolesTables extends Migration
 
             $table->primary(['role_id', 'user_id']);
         });
+    }
 
-        /**
+    /**
          * Reverse the migrations.
          *
          * @return void
@@ -78,5 +79,4 @@ class CreateRolesTables extends Migration
         {
             Schema::dropIfExists('roles_tables');
         }
-    }
 }

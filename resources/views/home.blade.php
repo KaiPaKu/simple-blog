@@ -45,6 +45,12 @@
 
 @section('sidebar')
 
+    <!-- @can('edit Forum') -->
+       <!-- <a href="#">Edit the Forum</a> -->
+    <!-- @endcan -->
+
+
+
     @can('edit articles') 
         <div class="card mb-4">
             <div class="card-header">Neuer Post</div>

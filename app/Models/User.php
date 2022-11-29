@@ -38,6 +38,37 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+
+    public function assignRole($role)
+    {
+        return $this->roles()->save(
+
+            Role::whereName($role)->firstOrFail()
+        );
+    }
+
+
+    public function hasRole($role)
+    {
+        if(if_string($role))
+        {
+            return$this->roles->contains('name', $roles);
+        }
+
+        return !! $role->intersect($this->roles)->count();
+    }
+
+
+
+
     /**
      * The attributes that should be cast.
      *
@@ -51,5 +82,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
 
 }

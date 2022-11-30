@@ -12,7 +12,6 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -38,36 +37,27 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-
-
-
-    public function roles()
+    public function rollen()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Rolle::class);
     }
 
-
-    public function assignRole($role)
+    public function gibRolle($rolle)
     {
-        return $this->roles()->save(
-
-            Role::whereName($role)->firstOrFail()
+        return $this->rollen()->save(
+            Rolle::whereName($rolle)->firstOrFail()
         );
     }
-
-
-    public function hasRole($role)
+    
+    public function hatRolle($rolle)
     {
-        if(if_string($role))
+        if(is_string($rolle)) 
         {
-            return$this->roles->contains('name', $roles);
+            return $this->rollen->contains('name', $rolle);
         }
 
-        return !! $role->intersect($this->roles)->count();
+        return !! $rolle->intersect($this->rollen)->count();
     }
-
-
-
 
     /**
      * The attributes that should be cast.

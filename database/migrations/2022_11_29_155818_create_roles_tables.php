@@ -13,62 +13,47 @@ class CreateRolesTables extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('rollen', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('label') -> nullable();
             $table->timestamps();
         });
 
-
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('rechte', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('label') -> nullable();
             $table->timestamps();
         });
 
-
-        Schema::create('permission_role', function (Blueprint $table) {
-            
-            $table->integer('permission_id') -> unsigned();
-
-            $table->integer('role_id') -> unsigned();
-
-            $table->foreign('permission_id')
-                    -> references('id')
-                    -> on('permission')
-                    -> onDelete('cascade');
-
-            $table->foreign('permission_id')
-                    -> references('id')
-                    -> on('permission')
-                    -> onDelete('cascade');
-
-            $table->primary(['permission_Id', 'role_id']);
-
+        Schema::create('recht_rolle', function (Blueprint $table) {
+            $table->integer('rolle_id')->unsigned();
+            $table->integer('recht_id')->unsigned();
+            $table->foreign('rolle_id')
+                -> references('id')
+                -> on('rollen')
+                -> onDelete('cascade');
+            $table->foreign('recht_id')
+                -> references('id')
+                -> on('rechte')
+                -> onDelete('cascade');
+            $table->primary(['recht_Id', 'rolle_id']);
         });
 
-
-        Schema::create('role_user', function (Blueprint $table) {
-            
-            $table->integer('role_id') -> unsigned();
-            $table->integer('user_id') -> unsigned();
-
-
-            $table->foreign('role_id')
-                    -> references('id')
-                    -> on('roles')
-                    -> onDelete('cascade');
-
+        Schema::create('rolle_user', function (Blueprint $table) {
+            $table->integer('rolle_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('rolle_id')
+                -> references('id')
+                -> on('rollen')
+                -> onDelete('cascade');
             $table->foreign('user_id')
-                    -> references('id')
-                    -> on('users')
-                    -> onDelete('cascade');
-
-            $table->primary(['role_id', 'user_id']);
-        });
-        
+                -> references('id')
+                -> on('users')
+                -> onDelete('cascade');
+            $table->primary(['rolle_id', 'user_id']);
+        });      
     }
 
     /**
@@ -78,6 +63,9 @@ class CreateRolesTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles_tables');
+        Schema::dropIfExists('rollen');
+        Schema::dropIfExists('rechte');
+        Schema::dropIfExists('recht_rolle');
+        Schema::dropIfExists('rolle_user');
     }
 }

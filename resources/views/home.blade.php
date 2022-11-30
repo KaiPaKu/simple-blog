@@ -45,11 +45,23 @@
 
 @section('sidebar')
 
-    <!-- @can('edit Forum') -->
-       <!-- <a href="#">Edit the Forum</a> -->
-    <!-- @endcan -->
+    @can('edit_forum')
+        <div class="card mb-4">
+            <div class="card-header">Edit the Forum</div>
+            <div class="card-body">
+                <a class="btn btn-success" href="#" role="button">Edit Forum</a>
+            </div>
+        </div>
+    @endcan
 
-
+    @can('manage_forum')
+        <div class="card mb-4">
+            <div class="card-header">Manage the Forum</div>
+            <div class="card-body">
+                <a class="btn btn-success" href="#" role="button">Manage Forum</a>
+            </div>
+        </div>
+    @endcan
 
     @can('edit articles') 
         <div class="card mb-4">

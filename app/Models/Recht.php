@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class Recht extends Model
 {
     use HasFactory;
 
-    //protected $table = 'permissions2';
+    protected $table = 'rechte';
 
-    public function roles()
+    public function rollen()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Rolle::class);
     }
 }

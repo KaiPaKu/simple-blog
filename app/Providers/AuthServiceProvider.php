@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Permission;
+use App\Models\Recht;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -24,7 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(GateContract $gate)
+    //public function boot(GateContract $gate)
+    public function boot()
     {
         $this->registerPolicies();
 
@@ -35,21 +36,16 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-
-        parent::registerPolicies($gate);
-
-
-        foreach($this->getPermissions() as $permission)
-        {
-            $gate-> define($permission->name, function($user) use($permission) {
-               return $user->hasRole($permission->roles);
+        foreach($this->gibRechte() as $recht) {
+            Gate::define($recht->name, function($user) use ($recht) {
+               return $user->hatRolle($recht->rollen);
             });
         }
     }
 
-    protected function getPermissions()
+    protected function gibRechte()
     {
-        return Permission::with('roles')->get();
+        return Recht::with('rollen')->get();
     }
 
 }
